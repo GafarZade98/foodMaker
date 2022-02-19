@@ -40,6 +40,6 @@ class Meal extends Model
      */
     public function ingredients()
     {
-        return $this->belongsToMany(Ingredient::class,'recipes');
+        return $this->belongsToMany(Ingredient::class);
     }
 }

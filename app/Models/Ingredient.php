@@ -34,4 +34,9 @@ class Ingredient extends Model
         'photo',
         'description',
     ];
+
+    public function meals()
+    {
+        return $this->belongsTo(Meal::class);
+    }
 }

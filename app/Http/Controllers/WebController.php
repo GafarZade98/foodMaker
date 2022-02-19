@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Ingredient, Meal};
+use App\Models\{Ingredient, IngredientMeal, Meal};
 use Illuminate\Http\Request;
 
 class WebController extends Controller
@@ -19,6 +19,20 @@ class WebController extends Controller
     }
 
     public function meals(Request $request){
-        return view("welcome");
+
+
+         $ingredients = new IngredientMeal();
+         $meals_id = $ingredients->select('meal_id')->whereIn('ingredient_id',$request->data)->get();
+      //   $meals_id = $ingredients->select('meal_id')->whereIn('ingredient_id',[2,3])->get();
+
+         $arr = [];
+         foreach ($meals_id as $key => $id){
+             $arr[] = $id->meal_id;
+         }
+          $meals = Meal::whereIn('id',$arr)->get();
+        return $response = [
+            'status'=>'success',
+            'data' => $meals
+        ];
     }
 }

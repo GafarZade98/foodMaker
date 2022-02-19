@@ -33,7 +33,7 @@
                     <p class="text-light">Praduktlari secerek istediyiniz yemeyi elde ede bilersiniz</p>
                     <p>
                         <a href="{{route('homepage')}}" class="btn btn-primary my-2"><i class="bi bi-arrow-clockwise"></i> Yenilə</a>
-                        <a href="{{route('homepage')}}" class="btn btn-primary my-2"><i class="bi bi-basket3-fill"></i> Hazırla</a>
+                        <a href="#" class="btn btn-primary my-2" id="cook"><i class="bi bi-basket3-fill"></i> Hazırla</a>
                     </p>
                 </div>
             </div>
@@ -68,26 +68,24 @@
             </div>
         </div>
         <section class=" text-center container">
-           @foreach($meals as $meal)
                 <div class="row mb-2">
                     <h2 class=text-light>Meals</h2>
                     <div class="col-md-6">
                         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="background-color: white">
                             <div class="col p-4 d-flex flex-column position-static">
-                                <h3 class="mb-0">{{$meal->getAttribute('name')}}</h3>
-                                <p class="card-text mb-auto">{!!$meal->getAttribute('description')!!}</p>
+                                <h3 class="mb-0">Name</h3>
+                                <p class="card-text mb-auto">Desc</p>
                             </div>
                             <div class="col-auto d-none d-lg-block">
-                                <img src="{{asset(Voyager::image($meal->getAttribute('photo')))}}" alt="" width="300" height="300">
+                                <img src="#" alt="" width="300" height="300">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <iframe height="300" src="{{$meal->getAttribute('url')}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                    </div>
+                            <iframe height="300" src="#" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                    </div>
                     </div>
                 </div>
-           @endforeach
         </section>
     </main>
 
@@ -99,40 +97,49 @@
 <script>
     $(document).ready(function () {
 
+        let ingre_arr = [] ;
+
         $('.choose').click(function () {
             let ingredients = $(this).data('ingredients');
             let labelClass = '.label' + ingredients.id
-           //console.log(ingredients['id'])
 
             let checkboxClass = '.checkbox' + ingredients.id
 
-            if ($(checkboxClass).prop('checked')) {
+            if ($(checkboxClass).prop('checked')){
                 $(labelClass).html('Seç').css({'background-color': 'white', 'color': 'blue'});
+                // ingre_arr.pop(ingredients['id']);
+                ingre_arr = jQuery.grep(ingre_arr, function(value) {
+                    return value != ingredients['id'];
+                });
+                console.log("id silirik")
+
             } else {
                 $(labelClass).html('<i class="bi bi-bookmark-check"></i>').css({
                     'background-color': 'green',
                     'color': 'white'
                 });
+                ingre_arr.push(ingredients['id']);
+                console.log("id elave edirik")
             }
 
-           var id = ingredients['id'];
-
-            let ingre_arr = [] ;
-            ingre_arr.push(id);
             console.log(ingre_arr)
 
+        })
+
+        $("#cook").click(function(){
             $.ajax({
                 type: "POST",
                 url: "{{route('cookie')}}",
                 data : {
-                    id: id,
+                    ingreddd :ingre_arr,
                     "_token": "{{ csrf_token() }}",
                 },
                 success: function (response) {
-                    console.log("success")
+                    console.log(response.data[0].name)
+
                 },
                 error: function (response) {
-                  console.log("error")
+                    console.log("error")
                 },
             });
 
