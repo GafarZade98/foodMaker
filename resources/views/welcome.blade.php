@@ -33,7 +33,7 @@
                     <p class="text-light">Praduktlari secerek istediyiniz yemeyi elde ede bilersiniz</p>
                     <p>
                         <a href="{{route('homepage')}}" class="btn btn-primary my-2"><i class="bi bi-arrow-clockwise"></i> Yenilə</a>
-                        <a href="{{route('homepage')}}" class="btn btn-primary my-2"><i class="bi bi-basket3-fill"></i> Hazırla</a>
+                        <a class="btn btn-primary my-2 cook"><i class="bi bi-basket3-fill"></i> Hazırla</a>
                     </p>
                 </div>
             </div>
@@ -52,9 +52,9 @@
                                     </div>
                                     <div class="d-flex justify-content-center align-items-center">
                                         <div class="btn-group">
-                                            <label for="checkbox{{$ingredient->getAttribute('id')}}" data-ingredients='@json($ingredient)' class="btn btn-sm btn-outline-primary m-2 choose label{{$ingredient->getAttribute('id')}}">Seç</label>
+                                            <label for="checkbox{{$ingredient->getAttribute('id')}}" data-ingredients='@json($ingredient)' class="btn btn-sm btn-outline-primary m-2 choose label{{$ingredient->getAttribute('id')}}">Choose</label>
                                             <input type="checkbox"  id="checkbox{{$ingredient->getAttribute('id')}}" style="display: none" class="btn btn-sm btn-outline-primary m-2 checkbox{{$ingredient->getAttribute('id')}}">
-                                            <button type="button" data-ingredients='@json($ingredient)' class="btn btn-sm btn-outline-danger m-2 delete">Sil</button>
+                                            <button type="button" data-ingredients='@json($ingredient)' class="btn btn-sm btn-outline-danger m-2 delete">Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -98,45 +98,44 @@
 
 <script>
     $(document).ready(function () {
+        let ingre_arr = [] ;
+
 
         $('.choose').click(function () {
             let ingredients = $(this).data('ingredients');
             let labelClass = '.label' + ingredients.id
-           //console.log(ingredients['id'])
+            var id = ingredients['id'];
 
             let checkboxClass = '.checkbox' + ingredients.id
 
             if ($(checkboxClass).prop('checked')) {
-                $(labelClass).html('Seç').css({'background-color': 'white', 'color': 'blue'});
+                $(labelClass).html('Choose').css({'background-color': 'white', 'color': 'blue'});
             } else {
                 $(labelClass).html('<i class="bi bi-bookmark-check"></i>').css({
                     'background-color': 'green',
                     'color': 'white'
                 });
+                ingre_arr.push(id);
             }
+        })
 
-           var id = ingredients['id'];
-
-            let ingre_arr = [] ;
-            ingre_arr.push(id);
-            console.log(ingre_arr)
-
+        $('.cook').click(function () {
             $.ajax({
                 type: "POST",
-                url: "{{route('cookie')}}",
-                data : {
-                    id: id,
+                url: "{{route('cook')}}",
+                data: {
+                    id: ingre_arr,
                     "_token": "{{ csrf_token() }}",
                 },
                 success: function (response) {
                     console.log("success")
                 },
                 error: function (response) {
-                  console.log("error")
+                    console.log("error")
                 },
             });
-
-        })
+            console.log(ingre_arr)
+        });
 
         $('.delete').click(function () {
             let ingredients = $(this).data('ingredients');
