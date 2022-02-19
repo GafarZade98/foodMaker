@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(VoyagerDatabaseSeeder::class);
+        $this->call(MealSeeder::class);
+        $this->call(IngredientSeeder::class);
 
         User::factory([
             'name' => 'Mikayil Ismayilov',
