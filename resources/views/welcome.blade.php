@@ -102,6 +102,7 @@
         $('.choose').click(function () {
             let ingredients = $(this).data('ingredients');
             let labelClass = '.label' + ingredients.id
+           //console.log(ingredients['id'])
 
             let checkboxClass = '.checkbox' + ingredients.id
 
@@ -113,6 +114,27 @@
                     'color': 'white'
                 });
             }
+
+           var id = ingredients['id'];
+
+            let ingre_arr = [] ;
+            ingre_arr.push(id);
+            console.log(ingre_arr)
+
+            $.ajax({
+                type: "POST",
+                url: "{{route('cookie')}}",
+                data : {
+                    id: id,
+                    "_token": "{{ csrf_token() }}",
+                },
+                success: function (response) {
+                    console.log("success")
+                },
+                error: function (response) {
+                  console.log("error")
+                },
+            });
 
         })
 

@@ -17,4 +17,8 @@ class WebController extends Controller
             'meals' => Meal::get()
         ]);
     }
+
+    public function meals(Request $request){
+        return view("welcome");
+    }
 }
