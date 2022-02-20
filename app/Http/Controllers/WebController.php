@@ -2,37 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Ingredient, IngredientMeal, Meal};
+use App\Models\{Ingredient, Meal};
 use Illuminate\Http\Request;
 
 class WebController extends Controller
 {
     public function index(Request $request)
     {
+        $input = $request->get('id');
         $search = $request->get('search');
-
+        $meal = Meal::whereHas('ingredients', function ($q) use ($input) {
+            $q->where('id', $input );
+        })->get();
+//        dd($meal);
         return view('welcome')->with([
             'ingredients' => Ingredient::query()
-                 ->when($search, fn ($query) => $query->where('name', 'like', "%$search%"))->paginate(10),
-            'meals' => Meal::get()
+                ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->paginate(10),
+            'meals' => $meal
         ]);
     }
 
-    public function meals(Request $request){
-
-
-         $ingredients = new IngredientMeal();
-         $meals_id = $ingredients->select('meal_id')->whereIn('ingredient_id',$request->data)->get();
-      //   $meals_id = $ingredients->select('meal_id')->whereIn('ingredient_id',[2,3])->get();
-
-         $arr = [];
-         foreach ($meals_id as $key => $id){
-             $arr[] = $id->meal_id;
-         }
-          $meals = Meal::whereIn('id',$arr)->get();
-        return $response = [
-            'status'=>'success',
-            'data' => $meals
-        ];
+    public function cook(Request $request)
+    {
+        $input = $request->all();
+        dd($input);
+        return response()->json(['success' => 'lffkld']);
     }
 }
