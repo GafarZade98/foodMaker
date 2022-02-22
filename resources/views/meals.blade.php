@@ -18,9 +18,9 @@
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item mx-3">
-                    <a class="nav-link active btn px-4" style="background-color: #65d765" aria-current="page" href="{{route('homepage')}}">MyFood</a>
+                    <a class="nav-link active font-weight-bold" style="font-size: 22px" aria-current="page" href="{{route('homepage')}}">MyFood</a>
                 </li>
-                <li class="nav-item mx-3">
+                <li class="nav-item mt-1 mx-3">
                     <a class="nav-link btn px-4" style="background-color: #65d765" href="{{route('meals')}}">Meals</a>
                 </li>
             </ul>
