@@ -2,30 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\{Database\Eloquent\Builder, Http\Request};
 use App\Models\{Ingredient, Meal};
-use Illuminate\Http\Request;
 
 class WebController extends Controller
 {
     public function index(Request $request)
     {
-        $input = $request->get('id');
         $search = $request->get('search');
-        $meal = Meal::whereHas('ingredients', function ($q) use ($input) {
-            $q->where('id', $input );
+        $ingredients = $request->get('ingredient', [null]);
+
+        $meal = Meal::whereHas('ingredients', function (Builder $query) use ($ingredients) {
+            $query->where('id', $ingredients);
         })->get();
-//        dd($meal);
+
         return view('welcome')->with([
             'ingredients' => Ingredient::query()
-                ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->paginate(10),
+                ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->get(),
             'meals' => $meal
         ]);
     }
 
-    public function cook(Request $request)
+    public function meals(Request $request)
     {
-        $input = $request->all();
-        dd($input);
-        return response()->json(['success' => 'lffkld']);
+        $search = $request->get('search');
+
+        return view('meals')->with([
+            'meals' => Meal::query()
+                ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->paginate(4)
+        ]);
     }
 }
