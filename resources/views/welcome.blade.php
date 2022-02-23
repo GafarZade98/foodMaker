@@ -31,7 +31,7 @@
     </div>
 </nav>
 <main>
-
+@dd(request('ingredient'))
     <section class=" text-center container">
         <div class="row">
             <div class="col-lg-6 col-md-8 mx-auto" >

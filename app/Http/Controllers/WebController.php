@@ -11,15 +11,23 @@ class WebController extends Controller
     {
         $search = $request->get('search');
         $ingredients = $request->get('ingredient', [null]);
+        $meals = collect([]);
 
-        $meal = Meal::whereHas('ingredients', function (Builder $query) use ($ingredients) {
-            $query->where('id', $ingredients);
-        })->get();
+        sort($ingredients);
+
+        foreach (Meal::get() as $meal) {
+            $mealIngredients = $meal->ingredients->pluck('id')->toArray();
+            sort($mealIngredients);
+
+            if (!array_diff($mealIngredients, $ingredients)) {
+                $meals = $meals->push($meal);
+            }
+        }
 
         return view('welcome')->with([
             'ingredients' => Ingredient::query()
                 ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->get(),
-            'meals' => $meal
+            'meals' => $meals
         ]);
     }
 
