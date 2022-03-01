@@ -9,6 +9,5 @@ class Ingredient extends Model
     public $fillable = [
         'name',
         'photo',
-        'description',
     ];
 }

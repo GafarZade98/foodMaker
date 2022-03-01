@@ -9,6 +9,7 @@ class Meal extends Model
 {
     public $fillable = [
         'name',
+        'url',
         'description',
         'photo',
     ];
