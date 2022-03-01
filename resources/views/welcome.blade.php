@@ -60,6 +60,9 @@
                                     <div class="btn-group">
                                         <label for="checkbox{{$ingredient->getAttribute('id')}}" data-ingredients='@json($ingredient)' class="btn btn-sm btn-outline-primary m-2 choose label{{$ingredient->getAttribute('id')}}">Choose</label>
                                         <input type="checkbox" name="ingredient[]"
+                                               @if(request('ingredient') != null)
+                                                    @if(in_array($ingredient->getAttribute('id'), request('ingredient'))) checked @endif
+                                               @endif
                                                style="display: none"
                                                value="{{$ingredient->getAttribute('id')}}"
                                                id="checkbox{{$ingredient->getAttribute('id')}}"
@@ -106,7 +109,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    $(document).ready(function () {
 
         $('.choose').click(function () {
             let ingredients = $(this).data('ingredients');
@@ -115,7 +117,7 @@
             let labelClass = '.label' + id
             let checkboxClass = '.checkbox' + ingredients.id
 
-            if ($(checkboxClass).prop('checked')) {
+            if ($(checkboxClass).prop('checked') == true) {
                 $(labelClass).html('Choose').css({'background-color': 'white', 'color': 'blue'});
             } else {
                 $(labelClass).html('<i class="bi bi-bookmark-check"></i>').css({
@@ -131,5 +133,4 @@
             $(className).hide();
         })
 
-    })
 </script>
