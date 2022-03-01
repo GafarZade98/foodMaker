@@ -13,23 +13,15 @@ class WebController extends Controller
     {
         $search = $request->get('search');
         $ingredients = $request->get('ingredient', [null]);
-        $meals = collect([]);
 
-        sort($ingredients);
-
-        foreach (Meal::get() as $meal) {
-            $mealIngredients = $meal->ingredients->pluck('id')->toArray();
-            sort($mealIngredients);
-
-            if (!array_diff($mealIngredients, $ingredients)) {
-                $meals = $meals->push($meal);
-            }
-        }
+        $meal = Meal::whereHas('ingredients', function (Builder $query) use ($ingredients) {
+            $query->where('id', $ingredients);
+        })->latest()->get();
 
         return view('welcome')->with([
             'ingredients' => Ingredient::query()
-                ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->paginate(10),
-            'meals' => $meals
+                ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->paginate(100),
+            'meals' => $meal
         ]);
     }
 
@@ -39,7 +31,7 @@ class WebController extends Controller
 
         return view('meals')->with([
             'meals' => Meal::query()
-                ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->paginate(4)
+                ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->paginate(5)
         ]);
     }
 
