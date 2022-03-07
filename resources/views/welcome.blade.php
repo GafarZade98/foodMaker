@@ -103,27 +103,50 @@
     </div>
     {{$ingredients->appends(request()->input())->links()}}
 
-    <section class=" text-center container">
-        @foreach($meals as $meal)
-            <div class="row mb-2">
-                <h2 class=text-light></h2>
-                <div class="col-md-6">
-                    <div class="row g-0 border rounded overflow-hidden d-flex justify-content-center" style="background-color: white">
-                        <div class="col p-4 d-flex flex-column position-static">
-                            <h3 class="mb-0">{{$meal->getAttribute('name')}}</h3>
-                            <p class="card-text mb-auto">{!!$meal->getAttribute('description')!!}</p>
-                        </div>
-                        <div class="col-auto d-lg-block">
-                            <img src="{{asset(\TCG\Voyager\Facades\Voyager::image($meal->getAttribute('photo')))}}" alt="" width="300" height="300">
+    <section class="text-center container">
+        @forelse($meals as $meal)
+                <div class="row mb-2">
+                    <h2 class=text-light></h2>
+                    <div class="col-md-6">
+                        <div class="row g-0 border rounded overflow-hidden d-flex justify-content-center" style="background-color: white">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                <h3 class="mb-0">{{$meal->getAttribute('name')}}</h3>
+                                <p class="card-text mb-auto">{!!$meal->getAttribute('description')!!}</p>
+                            </div>
+                            <div class="col-auto d-lg-block">
+                                <img src="{{asset(\TCG\Voyager\Facades\Voyager::image($meal->getAttribute('photo')))}}" alt="" width="300" height="300">
+                            </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <iframe height="300" src="https://www.youtube.com/embed//{{$meal->getAttribute('url')}}" ></iframe></div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                        <iframe height="300" src="https://www.youtube.com/embed//{{$meal->getAttribute('url')}}" ></iframe></div>
+            @empty
+                <div class="alert alert-info">There is no meal for your chooses, but you can try these</div>
+            @foreach($randomMeals as $randomMeal)
+                <div class="row mb-2">
+                    <h2 class=text-light></h2>
+                    <div class="col-md-6">
+                        <div class="row g-0 border rounded overflow-hidden d-flex justify-content-center" style="background-color: white">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                <h3 class="mb-0">{{$randomMeal->getAttribute('name')}}</h3>
+                                <p class="card-text mb-auto">{!!$randomMeal->getAttribute('description')!!}</p>
+                            </div>
+                            <div class="col-auto d-lg-block">
+                                <img src="{{asset(\TCG\Voyager\Facades\Voyager::image($randomMeal->getAttribute('photo')))}}" alt="" width="300" height="300">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <iframe height="300" src="https://www.youtube.com/embed//{{$randomMeal->getAttribute('url')}}" ></iframe></div>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+
+        @endforelse
     </section>
 </main>
 <!-- Modal -->

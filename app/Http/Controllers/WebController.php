@@ -25,11 +25,14 @@ class WebController extends Controller
                 $meals = $meals->push($meal);
             }
         }
+        $randomMeals = Meal::inRandomOrder()->limit(3)->get();
+//        dd($randomMeals);
 
         return view('welcome')->with([
             'ingredients' => Ingredient::query()
                 ->when($search, fn($query) => $query->where('name', 'like', "%$search%"))->paginate(10),
-            'meals' => $meals
+            'meals' => $meals,
+            'randomMeals' => $randomMeals
         ]);
     }
 
