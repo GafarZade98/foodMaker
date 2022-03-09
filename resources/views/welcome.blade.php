@@ -125,7 +125,7 @@
                 </div>
             @empty
             @if(request('ingredient'))
-                <div class="alert alert-info">There is no meal for your chooses, but you can try these</div>
+                <div class="alert alert-info">No meal available for chosen ingredients. Alternative options  are following:</div>
             @foreach($randomMeals as $randomMeal)
                 <div class="row mb-2">
                     <h2 class=text-light></h2>
