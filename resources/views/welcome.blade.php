@@ -124,6 +124,7 @@
                     </div>
                 </div>
             @empty
+            @if(request('ingredient'))
                 <div class="alert alert-info">There is no meal for your chooses, but you can try these</div>
             @foreach($randomMeals as $randomMeal)
                 <div class="row mb-2">
@@ -145,7 +146,7 @@
                     </div>
                 </div>
             @endforeach
-
+            @endif
         @endforelse
     </section>
 </main>
